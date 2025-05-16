@@ -7,6 +7,7 @@ import { registerPoint } from "../../actions";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useSelectedMemberStore } from "@/stores/selectedMemberStore";
 
 interface PointRegisterModalProps {
   memberId: number;
@@ -19,7 +20,7 @@ export default function PointRegisterModal({
 }: PointRegisterModalProps) {
   const queryClient = useQueryClient();
   const [errorMessage, setErrorMessage] = useState("");
-
+  const { updateTotalPoint } = useSelectedMemberStore();
   const {
     register,
     handleSubmit,
@@ -29,14 +30,18 @@ export default function PointRegisterModal({
   });
 
   const mutation = useMutation({
-    mutationFn: (data: PointFormValues) => registerPoint(memberId, data),
-    onSuccess: (res) => {
+    mutationFn: (data: PointFormValues) => registerPoint(data, memberId),
+    onSuccess: (res, variables) => {
       if (res?.error) {
         setErrorMessage("적립금 등록에 실패했습니다.");
       } else {
         queryClient.invalidateQueries({
           queryKey: ["pointHistories", memberId],
         });
+        queryClient.invalidateQueries({
+          queryKey: ["members"],
+        });
+        updateTotalPoint(variables.amount);
         onClose();
       }
     },
@@ -62,12 +67,19 @@ export default function PointRegisterModal({
         </button>
 
         <h2 className="text-xl font-semibold mb-4">적립금 등록</h2>
-
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1">
-              적립금 금액
-            </label>
+            <label className="block text-sm font-medium mb-1">등록일</label>
+            <input
+              type="date"
+              {...register("createdAt")}
+              className="w-full border px-3 py-2 rounded-md text-sm"
+            />
+            {errors.createdAt && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.createdAt.message}
+              </p>
+            )}
             <input
               type="number"
               {...register("amount", { valueAsNumber: true })}

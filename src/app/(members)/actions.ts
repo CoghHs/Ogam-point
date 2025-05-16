@@ -19,22 +19,24 @@ export async function registerMember(data: MemberFormValues) {
   return { success: true };
 }
 
-export async function registerPoint(memberId: number, data: PointFormValues) {
+export async function registerPoint(data: PointFormValues, memberId: number) {
   const result = pointSchema.safeParse(data);
   if (!result.success) {
     return { error: result.error.flatten().fieldErrors };
   }
-  const now = new Date();
-  const expiredAt = new Date(now);
-  expiredAt.setFullYear(now.getFullYear() + 1);
+  const createdAt = new Date(result.data.createdAt);
+  const expiredAt = new Date(createdAt);
+  expiredAt.setFullYear(createdAt.getFullYear() + 1);
+
   await db.pointHistory.create({
     data: {
       memberId,
       amount: result.data.amount,
-      createdAt: now,
+      createdAt,
       expiredAt,
     },
   });
+
   revalidatePath("/");
   return { success: true };
 }

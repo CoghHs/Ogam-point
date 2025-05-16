@@ -8,10 +8,10 @@ export const memberSchema = z.object({
 });
 
 export const pointSchema = z.object({
-  amount: z.coerce
-    .number()
-    .int("정수만 가능합니다")
-    .positive("양수만 가능합니다"),
+  amount: z.number().min(1, "1 이상의 숫자를 입력해주세요."),
+  createdAt: z.string().refine((val) => !isNaN(Date.parse(val)), {
+    message: "날짜를 선택해주세요.",
+  }),
 });
 
 export type MemberFormValues = z.infer<typeof memberSchema>;

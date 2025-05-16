@@ -19,7 +19,7 @@ export default function MemberRegisterModal({
   const onSubmit = async (data: MemberFormValues) => {
     await registerMember(data);
     await queryClient.invalidateQueries({ queryKey: ["members"] });
-    onClose;
+    onClose();
   };
   return (
     <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
