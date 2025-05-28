@@ -19,7 +19,7 @@ export default function MemberList() {
     member.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
   return (
-    <div className="">
+    <div>
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center ">
           <Image src="/ogam.png" alt="오감로고" width={50} height={50} />
@@ -44,7 +44,7 @@ export default function MemberList() {
       />
 
       {filteredMembers.length === 0 && (
-        <p className="text-sm text-gray-500">검색 결과가 없습니다.</p>
+        <p className="text-sm text-gray-500 mt-5">검색 결과가 없습니다.</p>
       )}
 
       <ul className="space-y-2 mt-2 ">

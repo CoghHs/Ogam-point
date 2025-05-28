@@ -12,6 +12,7 @@ export const pointSchema = z.object({
   createdAt: z.string().refine((val) => !isNaN(Date.parse(val)), {
     message: "날짜를 선택해주세요.",
   }),
+  type: z.enum(["REGISTER", "DEDUCT"]),
 });
 
 export type MemberFormValues = z.infer<typeof memberSchema>;

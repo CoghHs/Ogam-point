@@ -22,7 +22,7 @@ export default function MemberRegisterModal({
     onClose();
   };
   return (
-    <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center ">
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -52,7 +52,7 @@ export default function MemberRegisterModal({
             </button>
             <button
               type="submit"
-              className="bg-black text-white px-4 py-1 rounded-md"
+              className="bg-blue-600 hover:bg-blue-800 transition-colors text-white px-4 py-1 rounded-md"
             >
               등록
             </button>

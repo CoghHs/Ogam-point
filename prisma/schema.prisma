@@ -1,11 +1,15 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "./node_modules/@prisma/client"
 }
 
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
+}
+
+enum PointType {
+  REGISTER
+  DEDUCT
 }
 
 model Member {
@@ -23,6 +27,7 @@ model PointHistory {
   member    Member    @relation(fields: [memberId], references: [id], onDelete: Cascade)
   memberId  Int
   amount    Int
+  type      PointType
   createdAt DateTime  @default(now())
   expiredAt DateTime?
   isExpired Boolean   @default(false)

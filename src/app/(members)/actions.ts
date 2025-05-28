@@ -24,16 +24,52 @@ export async function registerPoint(data: PointFormValues, memberId: number) {
   if (!result.success) {
     return { error: result.error.flatten().fieldErrors };
   }
-  const createdAt = new Date(result.data.createdAt);
-  const expiredAt = new Date(createdAt);
-  expiredAt.setFullYear(createdAt.getFullYear() + 1);
+
+  const { amount, createdAt } = result.data;
+  const createdDate = new Date(createdAt);
+  const expiredDate = new Date(createdDate);
+  expiredDate.setFullYear(createdDate.getFullYear() + 1);
 
   await db.pointHistory.create({
     data: {
       memberId,
-      amount: result.data.amount,
-      createdAt,
-      expiredAt,
+      amount,
+      type: "REGISTER",
+      createdAt: createdDate,
+      expiredAt: expiredDate,
+    },
+  });
+
+  revalidatePath("/");
+  return { success: true };
+}
+export async function deductPoint(
+  data: PointFormValues,
+  memberId: number,
+  currentPoint: number
+) {
+  const result = pointSchema.safeParse(data);
+  if (!result.success) {
+    return { error: result.error.flatten().fieldErrors };
+  }
+
+  const { amount, createdAt, type } = result.data;
+
+  if (amount > currentPoint) {
+    return { error: { amount: ["현재 적립금보다 클 수 없습니다."] } };
+  }
+
+  const createdDate = new Date(createdAt);
+  const expiredDate = new Date(createdDate);
+  expiredDate.setFullYear(createdDate.getFullYear() + 1);
+
+  await db.pointHistory.create({
+    data: {
+      memberId,
+      amount,
+      type,
+      createdAt: createdDate,
+      expiredAt: expiredDate,
     },
   });
 
@@ -60,7 +96,6 @@ export async function deletePointHistory(pointId: number) {
   revalidatePath("/");
   return { success: true };
 }
-
 export async function getMembers() {
   const members = await db.member.findMany({
     orderBy: { createdAt: "desc" },
@@ -70,10 +105,11 @@ export async function getMembers() {
   });
 
   return members.map((member) => {
-    const totalPoint = member.PointHistory.reduce(
-      (sum, p) => sum + p.amount,
-      0
-    );
+    const totalPoint = member.PointHistory.reduce((sum, p) => {
+      const point = p.type === "DEDUCT" ? -p.amount : p.amount;
+      return sum + point;
+    }, 0);
+
     return {
       ...member,
       totalPoint,

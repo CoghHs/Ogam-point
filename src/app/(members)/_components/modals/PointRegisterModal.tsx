@@ -49,7 +49,10 @@ export default function PointRegisterModal({
 
   const onSubmit = (data: PointFormValues) => {
     setErrorMessage("");
-    mutation.mutate(data);
+    mutation.mutate({
+      ...data,
+      type: "REGISTER",
+    });
   };
 
   return (
@@ -68,11 +71,13 @@ export default function PointRegisterModal({
 
         <h2 className="text-xl font-semibold mb-4">적립금 등록</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <input type="hidden" value="REGISTER" {...register("type")} />
           <div>
             <label className="block text-sm font-medium mb-1">등록일</label>
             <input
               type="date"
               {...register("createdAt")}
+              defaultValue={new Date().toISOString().split("T")[0]}
               className="w-full border px-3 py-2 rounded-md text-sm"
             />
             {errors.createdAt && (
