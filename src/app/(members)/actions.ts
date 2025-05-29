@@ -105,10 +105,13 @@ export async function getMembers() {
   });
 
   return members.map((member) => {
-    const totalPoint = member.PointHistory.reduce((sum, p) => {
-      const point = p.type === "DEDUCT" ? -p.amount : p.amount;
-      return sum + point;
-    }, 0);
+    const totalPoint = member.PointHistory.filter((p) => !p.isExpired).reduce(
+      (sum, p) => {
+        const point = p.type === "DEDUCT" ? -p.amount : p.amount;
+        return sum + point;
+      },
+      0
+    );
 
     return {
       ...member,
@@ -118,6 +121,21 @@ export async function getMembers() {
 }
 
 export async function getPointHistories(memberId: number) {
+  const now = new Date();
+
+  await db.pointHistory.updateMany({
+    where: {
+      memberId,
+      expiredAt: {
+        lt: now,
+      },
+      isExpired: false,
+    },
+    data: {
+      isExpired: true,
+    },
+  });
+
   const histories = await db.pointHistory.findMany({
     where: {
       memberId,

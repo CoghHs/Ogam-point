@@ -161,7 +161,7 @@ export default function MemberDetailModal() {
       {/* Content Section */}
       <div className="flex-1 overflow-y-auto px-6 py-6">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <h3 className="text-xl font-semibold text-slate-900 flex items-center gap-2">
             <ClipboardList className="w-6 h-6 text-blue-600" />
             적립금 히스토리
           </h3>
@@ -200,13 +200,31 @@ export default function MemberDetailModal() {
             {filteredHistories.map((h) => (
               <div
                 key={h.id}
-                className="group bg-white border border-slate-200/60 hover:border-blue-200 rounded-2xl p-5 transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/10"
+                className={`group border rounded-2xl p-5 transition-all duration-200
+                  ${
+                    h.isExpired
+                      ? "bg-slate-100 border-slate-300 text-slate-400"
+                      : "bg-white border-slate-200/60 hover:border-blue-200 hover:shadow-lg hover:shadow-blue-500/10"
+                  }
+                `}
               >
+                {/* 상단: 포인트 금액 & 삭제 버튼 */}
                 <div className="flex items-start justify-between mb-4">
-                  <div className="bg-gradient-to-r from-emerald-500 to-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                  <div
+                    className={`px-3 py-1 rounded-full text-sm font-semibold
+                      ${
+                        h.type === "DEDUCT"
+                          ? "bg-red-500 text-white"
+                          : h.isExpired
+                          ? "bg-slate-300 text-slate-500"
+                          : "bg-emerald-500 text-white"
+                      }
+                    `}
+                  >
                     {h.type === "DEDUCT" ? "-" : "+"}
                     {h.amount.toLocaleString()}P
                   </div>
+
                   <button
                     onClick={() =>
                       showConfirm(() => handleDeletePointHistory(h.id))
@@ -217,53 +235,70 @@ export default function MemberDetailModal() {
                   </button>
                 </div>
 
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-sm text-slate-600">
+                {/* 상세 정보 */}
+                <div className="space-y-2 text-sm">
+                  <div className="flex items-center gap-2">
                     <Calendar className="w-4 h-4 text-slate-400" />
                     등록일: {new Date(h.createdAt).toLocaleDateString()}
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-slate-600">
+                  <div className="flex items-center gap-2">
                     <Clock className="w-4 h-4 text-slate-400" />
-                    소멸 예정일:{" "}
-                    {h.expiredAt
-                      ? new Date(h.expiredAt).toLocaleDateString()
-                      : "무제한"}
+                    {h.expiredAt ? (
+                      <>
+                        소멸 예정일:{" "}
+                        {new Date(h.expiredAt).toLocaleDateString()}
+                        {h.isExpired && (
+                          <span className="text-red-500 font-semibold ml-2">
+                            소멸됨
+                          </span>
+                        )}
+                      </>
+                    ) : (
+                      "무제한"
+                    )}
                   </div>
                 </div>
 
-                {/* Progress bar for expiration */}
+                {/* 하단 바 */}
                 {h.expiredAt && (
                   <div className="mt-3 pt-3 border-t border-slate-100">
                     <div className="flex items-center justify-between text-xs text-slate-500 mb-1">
                       <span>만료까지</span>
                       <span>
-                        {Math.max(
-                          0,
-                          Math.ceil(
-                            (new Date(h.expiredAt).getTime() -
-                              new Date().getTime()) /
-                              (1000 * 60 * 60 * 24)
-                          )
-                        )}
-                        일
+                        {h.isExpired
+                          ? "0일"
+                          : Math.max(
+                              0,
+                              Math.ceil(
+                                (new Date(h.expiredAt).getTime() -
+                                  new Date().getTime()) /
+                                  (1000 * 60 * 60 * 24)
+                              )
+                            ) + "일"}
                       </span>
                     </div>
                     <div className="w-full bg-slate-100 rounded-full h-1.5">
                       <div
-                        className="bg-gradient-to-r from-blue-500 to-indigo-500 h-1.5 rounded-full transition-all duration-300"
+                        className={`h-1.5 rounded-full transition-all duration-300 ${
+                          h.isExpired
+                            ? "bg-slate-400 w-full"
+                            : "bg-gradient-to-r from-blue-500 to-indigo-500"
+                        }`}
                         style={{
-                          width: `${Math.max(
-                            10,
-                            Math.min(
-                              100,
-                              ((new Date(h.expiredAt).getTime() -
-                                new Date().getTime()) /
-                                (365 * 24 * 60 * 60 * 1000)) *
-                                100
-                            )
-                          )}%`,
+                          width: h.isExpired
+                            ? "100%"
+                            : `${Math.max(
+                                10,
+                                Math.min(
+                                  100,
+                                  ((new Date(h.expiredAt).getTime() -
+                                    new Date().getTime()) /
+                                    (365 * 24 * 60 * 60 * 1000)) *
+                                    100
+                                )
+                              )}%`,
                         }}
-                      ></div>
+                      />
                     </div>
                   </div>
                 )}
