@@ -30,30 +30,35 @@ export default function MemberDetail() {
   const [onConfirmCallback, setOnConfirmCallback] = useState<() => void>(
     () => {}
   );
-  const showConfirm = (callback: () => void) => {
-    setOnConfirmCallback(() => callback);
-    setConfirmOpen(true);
-  };
+
   const queryClient = useQueryClient();
 
-  if (!selectedMember) return null;
+  const memberId = selectedMember?.id;
 
   const { data: histories = [] } = useQuery({
-    queryKey: ["pointHistories", selectedMember.id],
-    queryFn: () => getPointHistories(selectedMember.id),
+    queryKey: ["pointHistories", memberId],
+    queryFn: () => getPointHistories(memberId!),
+    enabled: !!memberId, // ✅ 조건적으로 실행되도록 설정
   });
 
   const handleDeleteMember = async () => {
-    await deleteMember(selectedMember.id);
+    if (!memberId) return;
+    await deleteMember(memberId);
     queryClient.invalidateQueries({ queryKey: ["members"] });
     setSelectedMember(null);
   };
 
   const handleDeletePointHistory = async (id: number) => {
+    if (!memberId) return;
     await deletePointHistory(id);
     queryClient.invalidateQueries({
-      queryKey: ["pointHistories", selectedMember.id],
+      queryKey: ["pointHistories", memberId],
     });
+  };
+
+  const handleShowConfirm = (callback: () => void) => {
+    setOnConfirmCallback(() => callback);
+    setConfirmOpen(true);
   };
 
   const filteredHistories = histories.filter((h) => {
@@ -61,28 +66,23 @@ export default function MemberDetail() {
     return h.type === activeTab;
   });
 
-  const handleShowConfirm = (callback: () => void) => {
-    setOnConfirmCallback(() => callback);
-    setConfirmOpen(true);
-  };
+  if (!selectedMember) return null;
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 100 }}
       animate={{ opacity: 1, y: 0 }}
-      className=" md:ml-4 bg-white rounded-2xl border border-slate-200 "
+      className="md:ml-4 bg-white rounded-2xl border border-slate-200"
     >
       {/* Header Section */}
       <div className="px-6 py-6">
         <MemberDetailHeader onBack={() => setSelectedMember(null)} />
-        {/* Member Info Card */}
+
         <MemberInfoCard
           name={selectedMember.name}
           phoneNumber={selectedMember.phoneNumber}
           totalPoint={selectedMember.totalPoint}
         />
-
-        {/* Action Buttons */}
 
         <MemberActionButtons
           onRegisterClick={() => setOpenPointModal(true)}
@@ -103,7 +103,6 @@ export default function MemberDetail() {
           </span>
         </div>
 
-        {/* Tabs */}
         <MemberPointTabs activeTab={activeTab} onChange={setActiveTab} />
 
         <MemberHistoryList
@@ -132,6 +131,7 @@ export default function MemberDetail() {
           onClose={() => setOpenPointModal(false)}
         />
       )}
+
       {openPointDeductedModal && (
         <PointDeductedModal
           currentPoint={selectedMember.totalPoint}

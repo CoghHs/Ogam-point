@@ -1,6 +1,6 @@
 "use client";
 
-import { DollarSign, Phone, User } from "lucide-react";
+import { DollarSign, Phone } from "lucide-react";
 import Image from "next/image";
 
 interface MemberInfoCardProps {

@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { pointSchema, PointFormValues } from "../../schema";
-import { deductPoint, registerPoint } from "../../actions";
+import { deductPoint } from "../../actions";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { motion } from "framer-motion";
