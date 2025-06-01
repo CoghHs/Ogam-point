@@ -13,6 +13,7 @@ export const pointSchema = z.object({
     message: "날짜를 선택해주세요.",
   }),
   type: z.enum(["REGISTER", "DEDUCT"]),
+  reason: z.string().optional(),
 });
 
 export type MemberFormValues = z.infer<typeof memberSchema>;

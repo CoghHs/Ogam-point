@@ -6,6 +6,8 @@ import { getMembers } from "../actions";
 import MemberRegisterModal from "./modals/MemberRegisterModal";
 import { useSelectedMemberStore } from "@/stores/selectedMemberStore";
 import Image from "next/image";
+import { Button } from "@/components/common/Button";
+import { Input } from "@/components/common/Input";
 
 export default function MemberList() {
   const [open, setOpen] = useState(false);
@@ -19,28 +21,25 @@ export default function MemberList() {
     member.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
   return (
-    <div>
+    <div className="px-1">
       <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center ">
+        <div className="flex items-center">
           <Image src="/ogam.png" alt="오감로고" width={50} height={50} />
           <h2 className="text-2xl font-light ml-1">MEMBERS</h2>
         </div>
         <div>
-          <button
-            onClick={() => setOpen(true)}
-            className="text-xl text-slate-500 rounded-md mr-4"
-          >
+          <Button variant="ghost" size="sm" onClick={() => setOpen(true)}>
             +
-          </button>
+          </Button>
         </div>
       </div>
 
-      <input
+      <Input
         type="text"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         placeholder="회원 이름 검색"
-        className="w-full border px-3 py-2 rounded-md text-sm"
+        className=""
       />
 
       {filteredMembers.length === 0 && (
@@ -70,25 +69,6 @@ export default function MemberList() {
           </li>
         ))}
       </ul>
-      {/* <ul className="space-y-2">
-        {members?.map((member) => (
-          <li
-            key={member.id}
-            className="cursor-pointer"
-            onClick={() => setSelectedMember(member)}
-          >
-            <div className="flex justify-between items-center p-2 border rounded-md hover:bg-gray-100">
-              <div>
-                <p className="font-medium">{member.name}</p>
-                <p className="text-sm text-gray-500">{member.phoneNumber}</p>
-              </div>
-              <div>
-                <p>{member.totalPoint}</p>
-              </div>
-            </div>
-          </li>
-        ))}
-      </ul> */}
       {open && <MemberRegisterModal onClose={() => setOpen(false)} />}
     </div>
   );

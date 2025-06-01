@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Button } from "./common/Button";
 
 type ConfirmModalProps = {
   message: string;
@@ -20,18 +21,12 @@ export default function ConfirmModal({
       >
         <p className="text-gray-800 mb-4">{message}</p>
         <div className="flex justify-end gap-2">
-          <button
-            onClick={onCancel}
-            className="px-4 py-1 rounded bg-gray-200 hover:bg-gray-300"
-          >
+          <Button variant="ghost" onClick={onCancel} size="md">
             취소
-          </button>
-          <button
-            onClick={onConfirm}
-            className="px-4 py-1 rounded bg-red-500 text-white hover:bg-red-600"
-          >
+          </Button>
+          <Button onClick={onConfirm} size="md">
             확인
-          </button>
+          </Button>
         </div>
       </motion.div>
     </div>

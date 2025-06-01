@@ -4,6 +4,8 @@ import { MemberFormValues, memberSchema } from "../../schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerMember } from "../../actions";
 import { motion } from "framer-motion";
+import { Button } from "@/components/common/Button";
+import { Input } from "@/components/common/Input";
 
 export default function MemberRegisterModal({
   onClose,
@@ -30,7 +32,7 @@ export default function MemberRegisterModal({
       >
         <h3 className="text-lg font-semibold mb-4">회원 등록</h3>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <input
+          <Input
             {...register("name")}
             placeholder="이름"
             className="w-full border p-2 rounded-md"
@@ -38,7 +40,7 @@ export default function MemberRegisterModal({
           {errors.name && (
             <p className="text-red-500 text-sm">{errors.name.message}</p>
           )}
-          <input
+          <Input
             {...register("phoneNumber")}
             placeholder="전화번호"
             className="w-full border p-2 rounded-md"
@@ -47,15 +49,12 @@ export default function MemberRegisterModal({
             <p className="text-red-500 text-sm">{errors.phoneNumber.message}</p>
           )}
           <div className="flex justify-end gap-2">
-            <button type="button" onClick={onClose}>
-              취소
-            </button>
-            <button
-              type="submit"
-              className="bg-blue-600 hover:bg-blue-800 transition-colors text-white px-4 py-1 rounded-md"
-            >
-              등록
-            </button>
+            <div className="flex justify-end gap-2">
+              <Button type="button" variant="clear" onClick={onClose}>
+                취소
+              </Button>
+              <Button type="submit">등록</Button>
+            </div>
           </div>
         </form>
       </motion.div>

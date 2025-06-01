@@ -8,6 +8,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useSelectedMemberStore } from "@/stores/selectedMemberStore";
+import { Button } from "@/components/common/Button";
+import { Input } from "@/components/common/Input";
 
 interface PointRegisterModalProps {
   memberId: number;
@@ -62,19 +64,21 @@ export default function PointRegisterModal({
         animate={{ opacity: 1, scale: 1 }}
         className="bg-white rounded-lg p-6 w-full max-w-md shadow-lg relative"
       >
-        <button
+        <Button
           onClick={onClose}
-          className="absolute top-4 right-4 text-sm text-gray-500 hover:text-black"
+          variant="clear"
+          size="sm"
+          className="absolute top-3 right-3 text-sm text-gray-500 hover:text-black"
         >
           닫기
-        </button>
+        </Button>
 
         <h2 className="text-xl font-semibold mb-4">적립금 등록</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <input type="hidden" value="REGISTER" {...register("type")} />
-          <div>
+          <Input type="hidden" value="REGISTER" {...register("type")} />
+          <div className="space-y-2">
             <label className="block text-sm font-medium mb-1">등록일</label>
-            <input
+            <Input
               type="date"
               {...register("createdAt")}
               defaultValue={new Date().toISOString().split("T")[0]}
@@ -85,7 +89,7 @@ export default function PointRegisterModal({
                 {errors.createdAt.message}
               </p>
             )}
-            <input
+            <Input
               type="number"
               {...register("amount", { valueAsNumber: true })}
               className="w-full border px-3 py-2 rounded-md text-sm"

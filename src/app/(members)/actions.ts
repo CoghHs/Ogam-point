@@ -53,7 +53,7 @@ export async function deductPoint(
     return { error: result.error.flatten().fieldErrors };
   }
 
-  const { amount, createdAt, type } = result.data;
+  const { amount, createdAt, type, reason } = result.data;
 
   if (amount > currentPoint) {
     return { error: { amount: ["현재 적립금보다 클 수 없습니다."] } };
@@ -70,6 +70,7 @@ export async function deductPoint(
       type,
       createdAt: createdDate,
       expiredAt: expiredDate,
+      reason,
     },
   });
 
