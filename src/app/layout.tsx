@@ -1,3 +1,4 @@
+import ProtectedPage from "@/components/ProtectedPage";
 import "./globals.css";
 import Provider from "@/components/Provider";
 import type { Metadata } from "next";
@@ -28,7 +29,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased p-8 bg-slate-50 min-h-screen overflow-y-auto `}
       >
-        <Provider>{children}</Provider>
+        <ProtectedPage>
+          <Provider>{children}</Provider>
+        </ProtectedPage>
       </body>
     </html>
   );
