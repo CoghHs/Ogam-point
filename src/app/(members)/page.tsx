@@ -21,7 +21,6 @@ export default function MemberPage() {
         </div>
       )}
 
-      {/* 모바일 전용 상세 영역: fixed로 전체 화면 덮음 */}
       {selectedMember && (
         <div className="absolute inset-0 z-50 md:hidden">
           <MemberDetail />
