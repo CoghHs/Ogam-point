@@ -81,7 +81,7 @@ export default function PointDeductedModal({
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <Input type="hidden" value="DEDUCT" {...register("type")} />
           <div className="space-y-2">
-            <label className="block text-sm font-medium mb-1">차감일</label>
+            <label className="block text-[16px] font-medium mb-1">차감일</label>
             <Input
               type="date"
               {...register("createdAt")}

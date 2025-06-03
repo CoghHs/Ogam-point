@@ -77,7 +77,7 @@ export default function PointRegisterModal({
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <Input type="hidden" value="REGISTER" {...register("type")} />
           <div className="space-y-2">
-            <label className="block text-sm font-medium mb-1">등록일</label>
+            <label className="block text-[16px] font-medium mb-1">등록일</label>
             <Input
               type="date"
               {...register("createdAt")}
