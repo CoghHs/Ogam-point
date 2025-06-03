@@ -39,7 +39,6 @@ export default function MemberList() {
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         placeholder="회원 이름 검색"
-        className=""
       />
 
       {filteredMembers.length === 0 && (
