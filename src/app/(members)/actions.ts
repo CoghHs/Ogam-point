@@ -101,17 +101,16 @@ export async function getMembers() {
   const members = await db.member.findMany({
     orderBy: { createdAt: "desc" },
     include: {
-      PointHistory: true,
+      PointHistory: true, // ✅ 삭제된 카드도 포함해서 모두 가져옴
     },
   });
 
   return members.map((member) => {
-    const totalPoint = member.PointHistory.filter(
-      (p) => !p.isExpired && !p.isDeleted
-    ).reduce((sum, p) => {
-      const point = p.type === "DEDUCT" ? -p.amount : p.amount;
-      return sum + point;
-    }, 0);
+    const totalPoint = member.PointHistory.filter((p) => !p.isExpired) // ✅ isDeleted는 무시
+      .reduce((sum, p) => {
+        const point = p.type === "DEDUCT" ? -p.amount : p.amount;
+        return sum + point;
+      }, 0);
 
     return {
       ...member,

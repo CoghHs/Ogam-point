@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import {
   deleteMember,
   deletePointHistory,
+  getMembers,
   getPointHistories,
 } from "../actions";
 import PointRegisterModal from "./modals/PointRegisterModal";
@@ -23,7 +24,10 @@ export default function MemberDetail() {
   const [activeTab, setActiveTab] = useState<"ALL" | "REGISTER" | "DEDUCT">(
     "ALL"
   );
-  const { selectedMember, setSelectedMember } = useSelectedMemberStore();
+
+  const selectedMember = useSelectedMemberStore((s) => s.selectedMember);
+  const setSelectedMember = useSelectedMemberStore((s) => s.setSelectedMember);
+
   const [openPointModal, setOpenPointModal] = useState(false);
   const [openPointDeductedModal, setOpenPointDeductedModal] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -38,7 +42,7 @@ export default function MemberDetail() {
   const { data: histories = [] } = useQuery({
     queryKey: ["pointHistories", memberId],
     queryFn: () => getPointHistories(memberId!),
-    enabled: !!memberId, // ✅ 조건적으로 실행되도록 설정
+    enabled: !!memberId,
   });
 
   const handleDeleteMember = async () => {
@@ -50,10 +54,23 @@ export default function MemberDetail() {
 
   const handleDeletePointHistory = async (id: number) => {
     if (!memberId) return;
+
     await deletePointHistory(id);
-    queryClient.invalidateQueries({
-      queryKey: ["pointHistories", memberId],
+
+    queryClient.invalidateQueries({ queryKey: ["pointHistories", memberId] });
+    queryClient.invalidateQueries({ queryKey: ["members"] });
+
+    const updatedMembers = await queryClient.fetchQuery({
+      queryKey: ["members"],
+      queryFn: getMembers,
     });
+
+    const updatedMember = updatedMembers.find((m) => m.id === memberId);
+
+    if (updatedMember) {
+      const { id, name, phoneNumber, totalPoint } = updatedMember;
+      setSelectedMember({ id, name, phoneNumber, totalPoint });
+    }
   };
 
   const handleShowConfirm = (callback: () => void) => {
