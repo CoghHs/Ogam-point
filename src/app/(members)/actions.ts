@@ -89,11 +89,11 @@ export async function deleteMember(memberId: number) {
 }
 
 export async function deletePointHistory(pointId: number) {
-  await db.pointHistory.delete({
-    where: {
-      id: pointId,
-    },
+  await db.pointHistory.update({
+    where: { id: pointId },
+    data: { isDeleted: true },
   });
+
   revalidatePath("/");
   return { success: true };
 }
@@ -106,13 +106,12 @@ export async function getMembers() {
   });
 
   return members.map((member) => {
-    const totalPoint = member.PointHistory.filter((p) => !p.isExpired).reduce(
-      (sum, p) => {
-        const point = p.type === "DEDUCT" ? -p.amount : p.amount;
-        return sum + point;
-      },
-      0
-    );
+    const totalPoint = member.PointHistory.filter(
+      (p) => !p.isExpired && !p.isDeleted
+    ).reduce((sum, p) => {
+      const point = p.type === "DEDUCT" ? -p.amount : p.amount;
+      return sum + point;
+    }, 0);
 
     return {
       ...member,
@@ -140,6 +139,7 @@ export async function getPointHistories(memberId: number) {
   const histories = await db.pointHistory.findMany({
     where: {
       memberId,
+      isDeleted: false,
     },
     orderBy: { createdAt: "desc" },
   });

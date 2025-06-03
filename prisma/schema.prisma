@@ -28,8 +28,9 @@ model PointHistory {
   memberId  Int
   amount    Int
   type      PointType
+  reason    String?
   createdAt DateTime  @default(now())
   expiredAt DateTime?
   isExpired Boolean   @default(false)
-  reason    String?
+  isDeleted Boolean   @default(false)
 }
