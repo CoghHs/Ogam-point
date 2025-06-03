@@ -82,11 +82,7 @@ export default function PointDeductedModal({
           <Input type="hidden" value="DEDUCT" {...register("type")} />
           <div className="space-y-2">
             <label className="block text-[16px] font-medium mb-1">차감일</label>
-            <Input
-              type="date"
-              {...register("createdAt")}
-              className="w-full border px-3 py-2 rounded-md text-sm"
-            />
+            <Input type="date" {...register("createdAt")} />
             {errors.createdAt && (
               <p className="text-red-500 text-xs mt-1">
                 {errors.createdAt.message}
@@ -96,7 +92,6 @@ export default function PointDeductedModal({
             <Input
               type="number"
               {...register("amount", { valueAsNumber: true })}
-              className="w-full border px-3 py-2 rounded-md text-sm"
               placeholder="예: 5000"
             />
             {errors.amount && (
@@ -108,7 +103,6 @@ export default function PointDeductedModal({
             <Input
               type="text"
               {...register("reason")}
-              className="w-full border px-3 py-2 rounded-md text-sm"
               placeholder="차감 사유 (예: 환불 처리)"
             />
             {errors.reason && (

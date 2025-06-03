@@ -82,7 +82,6 @@ export default function PointRegisterModal({
               type="date"
               {...register("createdAt")}
               defaultValue={new Date().toISOString().split("T")[0]}
-              className="w-full border px-3 py-2 rounded-md text-sm"
             />
             {errors.createdAt && (
               <p className="text-red-500 text-xs mt-1">
@@ -92,7 +91,6 @@ export default function PointRegisterModal({
             <Input
               type="number"
               {...register("amount", { valueAsNumber: true })}
-              className="w-full border px-3 py-2 rounded-md text-sm"
               placeholder="예: 1000"
             />
             {errors.amount && (
