@@ -54,19 +54,19 @@
 
 ### 🧾 적립금 등록 및 차감
 
-![적립 및 차감](./point-add-deduct.gif)
+![적립 및 차감](https://github.com/user-attachments/assets/b63c1e5e-ffe4-47b5-a3e0-4bc53566b0df)
 
 ### 🧹 적립금 히스토리 삭제
 
-![히스토리 삭제](./point-history-delete.gif)
+![히스토리 삭제](https://github.com/user-attachments/assets/8db8219e-95b2-4ac3-ba56-bfb4149e6a1d)
 
 ### 🗑️ 회원 삭제
 
-![회원 삭제](./member-delete.gif)
+![회원 삭제](https://github.com/user-attachments/assets/8e0d6541-5fb8-4d3d-b50c-4108b854c9f0)
 
 ### 🔚 만료된 적립금 시각화
 
-![소멸 카드 예시](./point-expired-card.png)
+<img src="https://github.com/user-attachments/assets/a6230411-5a8a-4ee5-b618-a2e4e1afcc4f" width="800" />
 
 ---
 
