@@ -50,7 +50,7 @@
 
 ### ➕ 회원 등록
 
-![회원 등록](./member-register.gif)
+![회원 등록](https://github.com/user-attachments/assets/eb0ef33b-40fb-41e5-ad8d-ea5f558c7639)
 
 ### 🧾 적립금 등록 및 차감
 
