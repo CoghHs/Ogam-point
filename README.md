@@ -68,6 +68,10 @@
 
 <img src="https://github.com/user-attachments/assets/a6230411-5a8a-4ee5-b618-a2e4e1afcc4f" width="800" />
 
+### 📱 반응형 시연
+
+![반응형 시연](https://github.com/user-attachments/assets/6a5739d8-0612-4b29-ba01-1c4c36458571)
+
 ---
 
 ## ⚒️ 트러블슈팅 (문제 해결)
