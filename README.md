@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🧘‍♀️ 오감요가 적립금 시스템
 
-## Getting Started
+> **요가 회원의 포인트를 관리하는 관리자용 웹 애플리케이션입니다.**  
+> 회원의 적립/차감 내역을 효율적으로 조회하고, 포인트 만료일을 기준으로 자동 만료 처리까지 지원합니다.
 
-First, run the development server:
+---
+
+## 📌 주요 기능
+
+- 회원 목록 조회 및 검색
+- 회원 등록 및 수정
+- 포인트 **적립/차감/만료** 관리
+- 상세 모달로 회원의 이력 확인 및 액션 수행
+- 만료 포인트 시각적 구분
+- 반응형 UI 및 접근성 고려
+
+---
+
+## ⚙️ 사용 기술 스택
+
+| 분야                  | 기술                                          |
+| --------------------- | --------------------------------------------- |
+| **Frontend**          | Next.js 15 (App Router), React 19, TypeScript |
+| **Styling**           | Tailwind CSS, tailwind-merge, clsx            |
+| **State Management**  | Zustand, React Query v5                       |
+| **Form & Validation** | React Hook Form, Zod                          |
+| **Animation**         | Motion                                        |
+| **Database**          | Prisma (PostgreSQL)                           |
+| **기타**              | Headless UI, Lucide Icons, Commitizen         |
+
+### 🎯 기획 의도
+
+이 프로젝트는 **요가 회원 관리의 효율성을 높이기 위한 목적**에서 출발했습니다.  
+재등록 시 지급되는 적립금, 1년 후 자동 소멸 기능, 적립/차감 내역 추적 등  
+운영자가 반복적으로 수행하던 업무를 **간편하고 정확하게 처리할 수 있는 관리자 전용 시스템**을 목표로 설계했습니다.
+
+기존에는 회원의 적립금을 수기로 관리하고 만료일이나 차감 이력을 별도로 기록해야 하는 불편함이 있었지만,  
+이 시스템을 통해 **회원별 적립금 이력을 자동으로 관리**하고,  
+**UI를 통해 직관적으로 적립/차감/만료 처리를 할 수 있도록 개선**했습니다.
+
+향후에는 단순한 적립금 관리 도구를 넘어,  
+회원별 메모 작성, 건강 상태 기록, 수강 이력 등 다양한 데이터를 함께 관리할 수 있는  
+**오감요가 전용 통합 관리자 플랫폼**으로 발전시켜 나갈 계획입니다.
+
+---
+
+## ⚒️ 트러블슈팅 (문제 해결)
+
+### 1. 포인트 만료 처리 시, 총 적립금에서 같이 차감되는 문제
+
+- **문제**: 서버에서 만료 처리를 할 때 `총 적립금(totalPoint)` 도 함께 감소되어 화면과 DB 정보가 어긋났음
+- **해결**:
+  - `totalPoint`는 실제 사용된 적립금만 반영하고, 만료 포인트는 별도 처리
+  - `isExpired` 값을 내역에 저장해 프론트에서 회색 처리로 시각적 구분
+
+### 2. 포인트 내역이 실시간 반영되지 않던 문제
+
+- **문제**: 적립/차감 후에도 내역 리스트가 자동 갱신되지 않음
+- **해결**: React Query의 `invalidateQueries`와 `queryKey` 전략을 수정해 자동 새로고침
+
+### 3. Prisma 마이그레이션 충돌 문제
+
+- **문제**: `dev` 환경에서는 `migrate dev`, `build` 단계에서는 `migrate deploy`를 사용하지 않으면 오류 발생
+- **해결**: `build` 스크립트에 `prisma generate && prisma migrate deploy` 명령어를 추가
+
+### 🔮 향후 개발 계획
+
+- 회원별 메모 기능 (예: 몸 상태, 통증 위치, 개별 요청사항 등)
+- 수강 이력 및 방문 기록 관리
+- 관리자 계정별 권한 부여 (예: 원장, 강사 등)
+
+---
+
+## 🧪 실행 방법
 
 ```bash
+# 로컬에서 실행
+npm install
+npx prisma migrate dev
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
