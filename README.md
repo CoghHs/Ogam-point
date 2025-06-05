@@ -70,7 +70,7 @@
 
 ### 📱 반응형 시연
 
-![반응형 시연](https://github.com/user-attachments/assets/6a5739d8-0612-4b29-ba01-1c4c36458571)
+![반응형 시연](https://github.com/user-attachments/assets/9b3fbb6e-4cb0-47cf-bcb1-c970c58b5ab8)
 
 ---
 
